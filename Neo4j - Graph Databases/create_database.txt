@@ -1,0 +1,92 @@
+//01 Nodes
+CREATE
+(:PERSON:USER {name: "Monika",surname: "Kowalska",ID:10203041, birth_date:date("2001-05-01"), email:"monika123@gmail.com", phone:"123456789", Nationality:"Polish", join_date:date("2022-10-01")}),
+(:PERSON:USER {name: "Małgorzata",surname: "Piec",ID:10203042,birth_date:date("1977-04-21"), email:"malpiec@gmail.com", phone:"123456788", Nationality:"Polish", join_date:date("2022-10-02")}),
+(:PERSON:USER {name: "Johannes",surname: "Bib",ID:10203043, birth_date:date("1999-11-17"), email:"bibjoh@gmail.com", phone:"123456787", Nationality:"Swedish", join_date:date("2022-10-03")}),
+(:PERSON:USER {name: "Grzegorz",surname: "Marzec",ID:10203044,birth_date:date("1987-12-01"), email:"monika123@wp.pl", phone:"123456689", Nationality:"Polish", join_date:date("2022-10-04")}),
+(:PERSON:USER {name: "Mateusz",surname: "Kowalski",ID:10203045,birth_date:date("1970-08-12"), email:"mat@wp.pl", phone:"123456189", Nationality:"Polish", join_date:date("2022-10-05")}),
+(:PERSON:USER {name: "Bożena",surname: "Las",ID:10203046,birth_date:date("2000-01-01"), email:"lasbozena@gmail.com", phone:"129456789", Nationality:"Polish", join_date:date("2022-10-06")}),
+(:PERSON:USER {name: "Miłosz",surname: "Pawłowski",ID:10203047,birth_date:date("2000-02-26"), email:"pawlmilos@gmail.com", phone:"122456789", Nationality:"Polish", join_date:date("2022-10-07")})
+
+//02 Artists
+//Users
+CREATE
+(:PERSON:ARTIST:SINGER {name: "Julia",surname: "Wieniawa", Nationality:"Polish", genre:"Pop"}),
+(:PERSON:ARTIST:BAND {name: "Blue Cafe",  Nationality:"Polish", band_size: 7, genre: "Jazz"}),
+(:PERSON:ARTIST:COMEDIAN {name: "Łukasz",surname: "Lodkowski", Nationality:"Polish"})
+
+//03 Places
+create
+(:PLACE:CLUB {name: "Parlament", city:"Gdańsk", address:"Świętego Ducha 2", contact:"manager_parlament@gmail.com"}),
+(:PLACE:CULTURAL_CENTER {name:"Baltic Sea", city:"Gdańsk",address:"Korzenna 33/35", contact:"manager_BalticSea@wp.pl"})
+
+//04 Events
+CREATE
+(:EVENT:CONCERT {title: "Omamy Tour 2024", date:date("2024-08-10"), start_time:time("19:30"), duration: 120}),
+(:EVENT:STAND_UP {title: "Please stand up", date:date("2024-09-16"), start_time:time("18:25"), duration:60}),
+(:EVENT:CONCERT {title: "Fanaberia Tour 2024", date:date("2024-08-25"), start_time:time("16:30"), duration:105}),
+(:EVENT:STAND_UP {title: "Swiateczny Kabaret", date:date("2024-12-06"), start_time:time("16:00"), duration:75})
+
+//05 Tickets
+CREATE
+(:TICKET {ID: "000", price:179}),
+(:TICKET {ID: "001", price:219}),
+(:TICKET {ID: "002", type:"VIP", seat:3,  price:449}),
+(:TICKET {ID: "003", seat:"10", row:"H", price:199}),
+(:TICKET {ID: "004", seat:"5", row:"J", price:249}),
+(:TICKET {ID: "005",seat:"24", row:"B", price:99}),
+(:TICKET {ID: "006", seat:"12", row:"A", price:129}),
+(:TICKET {ID: "007", seat:"47", row:"B", price:99}),
+(:TICKET {ID: "008", seat:"46", row:"B", price:99}),
+(:TICKET {ID: "009", seat:"12", row:"A", price:99})
+
+//02 Relationships
+match (event {title:"Omamy Tour 2024"}), (artist:ARTIST {surname:"Wieniawa"}), (place {name:"Parlament"})
+create (artist)-[:PERFORMS_AT {role: 'headliner', setlist: ['song a', 'song b']}]->(event)
+create (event)-[:TAKES_PLACE_AT {rental_price: 300, capacity: 30}]->(place);
+match (ticket), (event {title:"Omamy Tour 2024"})
+where ticket.ID IN ["000","001","002"]
+create (ticket)-[:ASSIGNED_TO]->(event);
+
+// 02 EVENT 2
+match (event {title:"Please stand up"}), (artist:ARTIST {surname:"Lodkowski"}), (place {name:"Parlament"})
+create (artist)-[:PERFORMS_AT {role: 'headliner'}]->(event)
+create (event)-[:TAKES_PLACE_AT {rental_price: 250, capacity: 20}]->(place);
+match (ticket), (event {title:"Please stand up"})
+where ticket.ID IN ["003","004","005"]
+create (ticket)-[:ASSIGNED_TO]->(event);
+
+// 03 EVENT 3
+match (event {title:"Fanaberia Tour 2024"}), (artist:ARTIST {name:"Blue Cafe"}), (place {name:"Baltic Sea"})
+create (artist)-[:PERFORMS_AT {role: 'headliner'}]->(event)
+create (event)-[:TAKES_PLACE_AT {rental_price: 150, capacity: 45}]->(place);
+match (ticket), (event {title:"Fanaberia Tour 2024"})
+where ticket.ID IN ["006","007","008","009"]
+create (ticket)-[:ASSIGNED_TO]->(event);
+
+// 04 EVENT 4
+match (event {title:"Swiateczny Kabaret"}), (artist:ARTIST {surname:"Lodkowski"}), (place {name:"Parlament"})
+create (artist)-[:PERFORMS_AT {role: 'headliner'}]->(event)
+create (event)-[:TAKES_PLACE_AT {rental_price: 300, capacity: 60}]->(place);
+
+// TICKETS
+match (ticket{ID:"000"}), (person{ID:10203041})
+create (person)-[:bought {when:datetime("2024-07-09T11:13:45"), how:"paypal"}]->(ticket);
+match (ticket{ID:"001"}), (person{ID:10203042})
+create (person)-[:bought {when:datetime("2024-08-01T14:30:15"), how:"blik"}]->(ticket);
+match (ticket{ID:"002"}), (person{ID:10203043})
+create (person)-[:bought {when:datetime("2024-07-11T11:10:15"), how:"visa"}]->(ticket);
+match (ticket{ID:"003"}), (person{ID:10203044})
+create (person)-[:bought {when:datetime("2024-07-09T10:00:10"), how:"blik"}]->(ticket);
+match (ticket{ID:"004"}), (person{ID:10203044})
+create (person)-[:bought {when:datetime("2024-06-09T10:00:10"), how:"blik"}]->(ticket);
+match (ticket{ID:"005"}), (person{ID:10203045})
+create (person)-[:bought {when:datetime("2024-07-11T21:11:09"), how:"visa"}]->(ticket);
+match (ticket{ID:"006"}), (person{ID:10203045})
+create (person)-[:bought {when:datetime("2024-07-11T12:00:10"), how:"visa"}]->(ticket);
+match (ticket{ID:"007"}), (person{ID:10203045})
+create (person)-[:bought {when:datetime("2024-07-11T12:00:10"), how:"visa"}]->(ticket);
+match (ticket{ID:"008"}), (person{ID:10203046})
+create (person)-[:bought {when:datetime("2024-08-02T20:01:19"), how:"paypal"}]->(ticket);
+match (ticket{ID:"009"}), (person{ID:10203047})
+create (person)-[:bought {when:datetime("2024-06-19T16:17:18"), how:"blik"}]->(ticket);

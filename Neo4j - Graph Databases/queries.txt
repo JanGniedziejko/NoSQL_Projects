@@ -1,0 +1,40 @@
+// 01 Query
+MATCH (m:TICKET)-->(n:EVENT)
+return labels(n) as Event_type, count(distinct n) as Number_of_shows, count(m) as Ticket_sold
+
+// 02 Query
+match(n:USER)
+return n.name+" "+n.surname as Full_name, duration.between(n.join_date, date()) as account_duration
+
+//03 Query
+MATCH (n:USER)-->(t:TICKET)-->(e:EVENT)<--(m:ARTIST)-->(e2:EVENT)
+where e2.date > date()
+RETURN  n.name, m.name as Artist,collect(distinct e2.title) as Recommendations
+
+// 04 Query
+match (t:TICKET)-->(e:EVENT)-[r:TAKES_PLACE_AT]->()
+return e.title,  max(r.capacity) - count(t)  as free_spaces
+
+// 05 Query
+//sum of money earned on tickets
+match (n:USER)-->(t:TICKET)-[r:TAKES_PLACE_AT]->(e:EVENT)
+return e.title,  sum(t.price)-max(r.rental_price)  as sum_earned
+
+// 06 Query
+//is seat 5 in row J on Stand up  performance "Omamy Tour 2024" taken, used so nobody will buy the same seat twice
+match (n:USER)-->(t:TICKET{seat:"5", row:"J"})-->(e:EVENT{title:"Please stand up"})
+return  n.name, n.surname
+
+// 07 Query
+//the place has the most experiance in holding en event(the more events held the more experience), for artists to help to choose where to held your event
+match (e:EVENT)-[TAKES_PLACE_AT]->(p:PLACE)
+return  p.name as PLACE_NAME, count(e) as NUMBER_OF_EVENTS
+order by  NUMBER_OF_EVENTS desc
+limit 1
+
+// 08 Query
+//who bought more than 1 ticket?
+match (u: USER)-[:bought]->(t: TICKET)
+with u.ID AS user_identificator, count(t) AS tickets_amount
+where tickets_amount > 1
+return user_identificator
