@@ -1,8 +1,12 @@
 # NoSQL_Projects
-collection of NoSQL projects using: Hive, Redis, MongoDB, and Neo4j
+collection of NoSQL projects using: Hive, Redis, MongoDB, and Neo4j. Projects were parts of courses at Gdansk University of Technology: Nonrelational Databases, and Advanced Nonrelational Databases
 
 ## Neo4j
-This project involves the development of a graph database for an e-ticket purchasing platform. The goal is to model the business process using Cypher queries (CRUD operations) and competency questions. Students are required to define business domain assumptions, create Cypher statements for database construction, and present competency questions both in natural and Cypher DML language. The results are shared in a meeting, with a focus on evaluating the graph database structure and queries.
+This project involves the development of a graph database for an e-ticket purchasing platform. 
+The goal is to model the business process using Cypher queries (CRUD operations) and competency questions.
+- defining business domain assumptions
+- create Cypher statements for database constructio
+- present competency questions both in natural and Cypher DML language
 
 ## Redis
 This project focuses on creating a Redis database for a warehouse management system. It demonstrates the use of Redis features like data types, Pub/Sub, and transactions to implement a complex usage scenario. Students must propose operations, implement them with Redis commands, and showcase how these features complement each other to solve real-world problems. The solution is presented with a live demo of Redis operations.
