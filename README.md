@@ -1,7 +1,7 @@
 # NoSQL_Projects
 This repository consist of 4 projects (Hive, Redis, MongoDB, Neo4j) and they were parts of courses at Gdansk University of Technology: Nonrelational Databases, and Advanced Nonrelational Databases. The purpose was to familiarize yourself with the new tools and gain fundamental knowledge from Nonrelational databases such as: Keyvalue, Document and Graph databases
 
-## [Neo4j](https://github.com/JanGniedziejko/NoSQL_Projects/tree/main/Neo4j%20-%20Graph%20Databases)
+## [Neo4j](https://github.com/JanGniedziejko/NoSQL_Projects/tree/main/Neo4j%20-%20Graph%20Databases) - E-ticket purchasing platform
 This project involves the development of a graph database for an e-ticket purchasing platform. 
 The goal is to model the business process using Cypher queries (CRUD operations) and competency questions.
 - defining business domain assumptions
