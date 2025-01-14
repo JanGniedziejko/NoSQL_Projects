@@ -1,0 +1,90 @@
+create database if not exists School_JGDK;
+use School_JGDK;
+
+create table if not exists Students(
+student_ID int,
+name string,
+surname string,
+gender string,
+birth_date date,
+Family_status string)
+Row format delimited
+Fields terminated by '|'
+Collection items terminated by ','
+Map keys terminated by ':'
+stored as textfile;
+
+create table if not exists Teachers(
+Teacher_ID int,
+name string,
+surname string,
+gender string,
+education_level string,
+employment_date date,
+Office_No int,
+salary_range string,
+contact_info STRUCT<phone: STRING, email: STRING>)
+Row format delimited
+Fields terminated by '|'
+stored as textfile;
+
+create table if not exists Classes(
+Class_ID int,
+Profile array<string>)
+Partitioned by (Starting_year int)
+Row format delimited
+Fields terminated by '|'
+Collection items terminated by ','
+stored as textfile;
+
+
+create table if not exists Courses_text(
+Course_ID int,
+level string,
+Subject string)
+Row format delimited
+Fields terminated by '|'
+stored as textfile;
+
+create table if not exists Courses(
+Course_ID int,
+level string)
+Partitioned by (Subject string)
+Row format delimited
+Fields terminated by '|'
+stored as orc;
+
+create table if not exists Dates(
+Date_ID int,
+Date_date date)
+Row format delimited
+Fields terminated by '|'
+stored as textfile;
+
+
+create external table if not exists Monitoring_text(
+Student_ID int,
+Course_ID int,
+Teacher_ID int,
+Class_ID int,
+Date_ID int,
+Result int,
+attendendance int)
+Clustered by (Student_ID) into 4 buckets
+Row format delimited
+Fields terminated by '|'
+stored as textfile
+location 'hdfs:///user/andb11/monitoring/';
+
+create table if not exists Monitoring(
+Student_ID int,
+Course_ID int,
+Teacher_ID int,
+Class_ID int,
+Date_ID int,
+Result int,
+attendendance int)
+Clustered by (Student_ID) into 4 buckets
+Row format delimited
+Fields terminated by '|'
+stored as parquet;

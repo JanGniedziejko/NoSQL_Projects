@@ -1,0 +1,35 @@
+--> STATIC PARTITIONING - CLASSES
+
+LOAD DATA LOCAL INPATH 'hive/classes2014.txt'
+INTO TABLE Classes
+PARTITION (Starting_year=2014);
+
+LOAD DATA LOCAL INPATH 'hive/classes2015.txt'
+INTO TABLE Classes
+PARTITION (Starting_year=2015);
+
+--> STUDENTS, TEACHERS, DATES
+
+LOAD DATA LOCAL INPATH 'hive/students.txt' INTO TABLE Students;
+
+LOAD DATA LOCAL INPATH 'hive/teachers.txt' INTO TABLE Teachers;
+
+LOAD DATA LOCAL INPATH 'hive/date.txt' INTO TABLE Dates;
+
+
+--> MONITORING
+
+insert into table monitoring
+select * from monitoring_text;
+
+
+
+--> DYNAMIC PARTITIONING - COURSES
+
+SET hive.exec.dynamic.partition=true;
+SET hive.exec.dynamic.partition.mode=nonstrict;
+
+LOAD DATA LOCAL INPATH 'hive/courses.txt' INTO TABLE courses_text;
+
+Insert into table courses partition (subject)
+Select * from courses_text;
